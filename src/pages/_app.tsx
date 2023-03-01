@@ -11,6 +11,13 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import store, { persistor } from '@/configs/redux';
 import LayoutDefault from '@/layouts/LayoutDefault';
 
+import { WagmiConfig, createClient, configureChains } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import { bscTestnet } from "wagmi/chains";
+
+import { ApolloProvider } from "@apollo/client";
+import { apolloClient } from "@/configs/apollo";
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [queryClient] = useState(
     new QueryClient({
@@ -23,16 +30,31 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     })
   );
 
+  const { provider } = configureChains(
+    [bscTestnet],
+    [publicProvider()]
+  );
+
+  const client = createClient({
+    autoConnect: true,
+    provider,
+  });
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <QueryClientProvider client={queryClient}>
-          <LayoutDefault>
-            <Component {...pageProps} />
-          </LayoutDefault>
-        </QueryClientProvider>
+        <ApolloProvider client={apolloClient}>
+          <QueryClientProvider client={queryClient}>
+            <WagmiConfig client={client}>
+              <LayoutDefault>
+                <Component {...pageProps} />
+              </LayoutDefault>
+            </WagmiConfig>
+          </QueryClientProvider>
+        </ApolloProvider>
       </PersistGate>
     </Provider>
+
   );
 };
 

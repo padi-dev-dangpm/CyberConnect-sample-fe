@@ -41,7 +41,10 @@
 			"@/services/*": ["./src/services/*"],
 			"@/apis/*": ["./src/apis/*"],
 			"@/components/*": ["./src/components/*"],
-			"@types/*": ["./src/@types/*"]
+			"@types/*": ["./src/@types/*"],
+			"@/abis/*": ["./src/abis/*"],
+			"@/graphql/*": ["./src/graphql/*"],
+			"@/enums/*": ["./src/enums/*"]
 		}
 	},
 	"exclude": ["./out/**/*", "./node_modules/**/*", "cypress/**/*.ts"],
